@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - API Keys</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f2f6fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2563eb;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: space-between;
+        }
+
+        input, button {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        input[type="text"], input[type="number"] {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #1e4ed8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #333;
+            padding: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .delete-btn {
+            background-color: #ef4444;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .api-url {
+            background: #f1f5f9;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: #2563eb;
+            word-break: break-all;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>🔐 Admin Panel - Manage API Keys</header>
+    <div class="container">
+        <form method="POST" action="/create_key">
+            <input type="text" name="name" placeholder="Enter API key name" required>
+            <input type="number" name="hours" placeholder="Valid for (hours)" required>
+            <button type="submit">Create Key</button>
+        </form>
+
+        <h3>Active API Keys</h3>
+        <table>
+            <tr>
+                <th>Key Name</th>
+                <th>Expiry Time</th>
+                <th>API Endpoint</th>
+                <th>Action</th>
+            </tr>
+            {% for key, data in keys.items() %}
+            <tr>
+                <td><b>{{ key }}</b></td>
+                <td>{{ data.expiry }}</td>
+                <td>
+                    <div class="api-url">
+                        http://127.0.0.1:5000/fetch?aadhaar=XXXXXXXXXXXX&key={{ key }}
+                    </div>
+                </td>
+                <td>
+                    <form method="POST" action="/delete_key/{{ key }}">
+                        <button class="delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="color: #888;">No active keys yet</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <footer>Developed by <b>Ganesh</b> • Flask Admin Panel</footer>
+</body>
+</html>
